@@ -44,7 +44,7 @@ from print_functions_for_lab_checks import *
 def main():
     # TODO: 1. Define start_time to measure total program runtime by
     # collecting start time
-    start_time = None
+    start_time = time()
     
     # TODO: 2. Define get_input_args() function to create & retrieve command
     # line arguments
@@ -77,13 +77,13 @@ def main():
 
     # TODO: 1. Define end_time to measure total program runtime
     # by collecting end time
-    end_time = None
+    end_time = time()
 
     # TODO: 1. Define tot_time to computes overall runtime in
     # seconds by replacing zero with a the mathematical calculation that 
     # computes overall runtime
     # The print statement prints Overall runtime in hh:mm:ss format
-    tot_time = 0
+    tot_time = end_time - start_time
     print("\n** Total Elapsed Runtime:",
           str(int((tot_time/3600)))+":"+str(int((tot_time%3600)/60))+":"
           +str(int((tot_time%3600)%60)) )
