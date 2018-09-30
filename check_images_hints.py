@@ -31,25 +31,26 @@
 
 # Imports python modules
 import argparse
-from time import time, sleep
 from os import listdir
+from time import time
 
-# Imports classifier function for using CNN to classify images 
-from classifier import classifier 
+
+# Imports classifier function for using CNN to classify images
 
 # Imports print functions that check the lab
-from print_functions_for_lab_checks import *
+
 
 # Main program function defined below
 def main():
     # TODO: 1. Define start_time to measure total program runtime by
     # collecting start time
     start_time = time()
-    
+
     # TODO: 2. Define get_input_args() function to create & retrieve command
     # line arguments
     in_arg = get_input_args()
-    
+    print("Argument 1:", in_arg.dir, "  Argument 2:", in_arg.arch, "  Argument 3:", in_arg.dogfile)
+
     # TODO: 3. Define get_pet_labels() function to create pet image labels by
     # creating a dictionary with key=filename and value=file label to be used
     # to check the accuracy of the classifier function
@@ -59,7 +60,7 @@ def main():
     # labels with the classifier function uisng in_arg.arch, comparing the 
     # labels, and creating a dictionary of results (result_dic)
     result_dic = classify_images(in_arg.dir, answers_dic, in_arg.arch)
-    
+
     # TODO: 5. Define adjust_results4_isadog() function to adjust the results
     # dictionary(result_dic) to determine if classifier correctly classified
     # images as 'a dog' or 'not a dog'. This demonstrates if the model can
@@ -85,12 +86,11 @@ def main():
     # The print statement prints Overall runtime in hh:mm:ss format
     tot_time = end_time - start_time
     print("\n** Total Elapsed Runtime:",
-          str(int((tot_time/3600)))+":"+str(int((tot_time%3600)/60))+":"
-          +str(int((tot_time%3600)%60)) )
+          str(int((tot_time / 3600))) + ":" + str(int((tot_time % 3600) / 60)) + ":"
+          + str(int((tot_time % 3600) % 60)))
 
 
-
-# TODO: 2.-to-7. Define all the function below. Notice that the input 
+# TODO: 2.-to-7. Define all the function below. Notice that the input
 # paramaters and return values have been left in the function's docstrings. 
 # This is to provide guidance for acheiving a solution similar to the 
 # instructor provided solution. Feel free to ignore this guidance as long as 
@@ -118,14 +118,13 @@ def get_input_args():
     # Creates 3 command line arguments args.dir for path to images files,
     # args.arch which CNN model to use for classification, args.labels path to
     # text file with names of dogs.
-    parser.add_argument('--dir', type=str, default='pet_images/', 
+    parser.add_argument('--dir', type=str, default='pet_images/',
                         help='path to folder of images')
     # TODO: 2. EDIT parse.add_argument statements BELOW to add type & help for:
     #          --arch - the CNN model architecture
     #          --dogfile - text file of names of dog breeds
-    parser.add_argument('--arch', default = 'vgg' )
-    parser.add_argument('--dogfile', default = 'dognames.txt' )
-
+    parser.add_argument('--arch', default='vgg')
+    parser.add_argument('--dogfile', default='dognames.txt')
 
     # returns parsed argument collection
     return parser.parse_args()
@@ -146,44 +145,44 @@ def get_pet_labels(image_dir):
     """
     # Creates list of files in directory
     in_files = listdir(image_dir)
-    
+
     # Processes each of the files to create a dictionary where the key
     # is the filename and the value is the picture label (below).
- 
+
     # Creates empty dictionary for the labels
     petlabels_dic = dict()
-   
+
     # Processes through each file in the directory, extracting only the words
     # of the file that contain the pet image label
     for idx in range(0, len(in_files), 1):
-       
-       # Skips file if starts with . (like .DS_Store of Mac OSX) because it 
-       # isn't an pet image file
-       if in_files[idx][0] != ".":
-           
-           # Creates temporary label variable to hold pet label name extracted 
-           pet_label = ""
 
-           # TODO: 3. BELOW REPLACE pass with CODE that will process each 
-           #          filename in the in_files list to extract the dog breed 
-           #          name from the filename. Recall that each filename can be
-           #          accessed by in_files[idx]. Be certain to place the 
-           #          extracted dog breed name in the variable pet_label 
-           #          that's created as an empty string ABOVE
-           pass
+        # Skips file if starts with . (like .DS_Store of Mac OSX) because it
+        # isn't an pet image file
+        if in_files[idx][0] != ".":
 
-           # If filename doesn't already exist in dictionary add it and it's
-           # pet label - otherwise print an error message because indicates 
-           # duplicate files (filenames)
-           if in_files[idx] not in petlabels_dic:
-              petlabels_dic[in_files[idx]] = pet_label
-              
-           else:
-               print("Warning: Duplicate files exist in directory", 
-                     in_files[idx])
- 
+            # Creates temporary label variable to hold pet label name extracted
+            pet_label = ""
+
+            # TODO: 3. BELOW REPLACE pass with CODE that will process each
+            #          filename in the in_files list to extract the dog breed
+            #          name from the filename. Recall that each filename can be
+            #          accessed by in_files[idx]. Be certain to place the
+            #          extracted dog breed name in the variable pet_label
+            #          that's created as an empty string ABOVE
+            pass
+
+            # If filename doesn't already exist in dictionary add it and it's
+            # pet label - otherwise print an error message because indicates
+            # duplicate files (filenames)
+            if in_files[idx] not in petlabels_dic:
+                petlabels_dic[in_files[idx]] = pet_label
+
+            else:
+                print("Warning: Duplicate files exist in directory",
+                      in_files[idx])
+
     # returns dictionary of labels
-    return(petlabels_dic)
+    return (petlabels_dic)
 
 
 def classify_images(images_dir, petlabel_dic, model):
@@ -220,79 +219,78 @@ def classify_images(images_dir, petlabel_dic, model):
 
     # Process all files in the petlabels_dic - use images_dir to give fullpath
     for key in petlabel_dic:
-       
-       # TODO: 4.a Set the string variable model_label to be the string that's 
-       #           returned from using the classifier function instead of the   
-       #           empty string below.
-       #
-       #  Runs classifier function to classify the images classifier function 
-       # inputs: path + filename  and  model, returns model_label 
-       # as classifier label
-       model_label = ""
 
-       # TODO: 4.b BELOW REPLACE pass with CODE to process the model_label to 
-       #           convert all characters within model_label to lowercase 
-       #           letters and then remove whitespace characters from the ends
-       #           of model_label. Be certain the resulting processed string 
-       #           is named model_label.
-       #
-       # Processes the results so they can be compared with pet image labels
-       # set labels to lowercase (lower) and stripping off whitespace(strip)
-       pass
-       
-       # defines truth as pet image label and trys to find it using find() 
-       # string function to find it within classifier label(model_label).
-       truth = petlabel_dic[key]
-       found = model_label.find(truth)
-       
-       # If found (0 or greater) then make sure true answer wasn't found within
-       # another word and thus not really found, if truely found then add to 
-       # results dictionary and set match=1(yes) otherwise as match=0(no)
-       if found >= 0:
-           if ( (found == 0 and len(truth)==len(model_label)) or
-                (  ( (found == 0) or (model_label[found - 1] == " ") )  and
-                   ( (found + len(truth) == len(model_label)) or   
-                      (model_label[found + len(truth): found+len(truth)+1] in 
-                     (","," ") ) 
-                   )      
-                )
-              ):            
-               # TODO: 4.c REPLACE pass BELOW with CODE that adds the 
-               #           filename (key) to results_dic dictionary for the 
-               #           list (value) that contains the pet label (truth),
-               #           the classifier label (model_label), and value that 
-               #           indicates both pet label & classifier label match(1)
-               #
-               # Found pet label (truth) as stand-alone word(not within a word)
-               # within classifier label (model_label) - is a match 
-               pass
+        # TODO: 4.a Set the string variable model_label to be the string that's
+        #           returned from using the classifier function instead of the
+        #           empty string below.
+        #
+        #  Runs classifier function to classify the images classifier function
+        # inputs: path + filename  and  model, returns model_label
+        # as classifier label
+        model_label = ""
 
+        # TODO: 4.b BELOW REPLACE pass with CODE to process the model_label to
+        #           convert all characters within model_label to lowercase
+        #           letters and then remove whitespace characters from the ends
+        #           of model_label. Be certain the resulting processed string
+        #           is named model_label.
+        #
+        # Processes the results so they can be compared with pet image labels
+        # set labels to lowercase (lower) and stripping off whitespace(strip)
+        pass
 
-           # TODO: 4.d REPLACE pass BELOW with CODE that adds the 
-           #           filename (key) to results_dic dictionary for the 
-           #           list (value) that contains the pet label (truth),
-           #           the classifier label (model_label), and value that 
-           #           indicates pet label & classifier label don't match(0)
-           #                   
-           # Found within a word that composes the classifier label,  
-           # like: 'fox' being found within 'foxhound' - not a match  
-           else:
-               pass
+        # defines truth as pet image label and trys to find it using find()
+        # string function to find it within classifier label(model_label).
+        truth = petlabel_dic[key]
+        found = model_label.find(truth)
+
+        # If found (0 or greater) then make sure true answer wasn't found within
+        # another word and thus not really found, if truely found then add to
+        # results dictionary and set match=1(yes) otherwise as match=0(no)
+        if found >= 0:
+            if ((found == 0 and len(truth) == len(model_label)) or
+                    (((found == 0) or (model_label[found - 1] == " ")) and
+                     ((found + len(truth) == len(model_label)) or
+                      (model_label[found + len(truth): found + len(truth) + 1] in
+                       (",", " "))
+                     )
+                    )
+            ):
+                # TODO: 4.c REPLACE pass BELOW with CODE that adds the
+                #           filename (key) to results_dic dictionary for the
+                #           list (value) that contains the pet label (truth),
+                #           the classifier label (model_label), and value that
+                #           indicates both pet label & classifier label match(1)
+                #
+                # Found pet label (truth) as stand-alone word(not within a word)
+                # within classifier label (model_label) - is a match
+                pass
 
 
-       # TODO: 4.e REPLACE pass BELOW with CODE that adds the 
-       #           filename (key) to results_dic dictionary for the 
-       #           list (value) that contains the pet label (truth),
-       #           the classifier label (model_label), and value that 
-       #           indicates pet label & classifier label don't match(0)
-       #                   
-       # if not pet label isn't found within classifier label - not a match
-       else:
-           pass 
-               
-    # Return results dictionary
-    return(results_dic)
+            # TODO: 4.d REPLACE pass BELOW with CODE that adds the
+            #           filename (key) to results_dic dictionary for the
+            #           list (value) that contains the pet label (truth),
+            #           the classifier label (model_label), and value that
+            #           indicates pet label & classifier label don't match(0)
+            #
+            # Found within a word that composes the classifier label,
+            # like: 'fox' being found within 'foxhound' - not a match
+            else:
+                pass
 
+
+        # TODO: 4.e REPLACE pass BELOW with CODE that adds the
+        #           filename (key) to results_dic dictionary for the
+        #           list (value) that contains the pet label (truth),
+        #           the classifier label (model_label), and value that
+        #           indicates pet label & classifier label don't match(0)
+        #
+        # if not pet label isn't found within classifier label - not a match
+        else:
+            pass
+
+            # Return results dictionary
+    return (results_dic)
 
 
 def adjust_results4_isadog(results_dic, dogsfile):
@@ -322,7 +320,7 @@ def adjust_results4_isadog(results_dic, dogsfile):
                 text file's name)
     Returns:
            None - results_dic is mutable data type so no return needed.
-    """           
+    """
     # TODO: 5. EDIT and ADD code BELOW to do the following that's stated 
     #          in the comments below that start with "TODO: 5."
     # 
@@ -338,8 +336,7 @@ def adjust_results4_isadog(results_dic, dogsfile):
         # Processes each line in file until reaching EOF (end-of-file) by 
         # processing line and adding dognames to dognames_dic with while loop
         while line != "":
-
-            # TODO: 5.a REPLACE pass with CODE remove the newline character from 
+            # TODO: 5.a REPLACE pass with CODE remove the newline character from
             #           the variable line  
             #
             # Process line by striping newline from line
@@ -350,14 +347,12 @@ def adjust_results4_isadog(results_dic, dogsfile):
             #           to dognames_dic as the 'key' with the 'value' of 1. 
             #
             # adds dogname to dogsnames_dic if it doesn't already exist in dic
-            pass 
+            pass
 
             # Reads in next line in file to be processed with while loop
             # if this line isn't empty (EOF)
             line = infile.readline()
-            
-    
-    
+
     # Add to whether pet labels & classifier labels are dogs by appending
     # two items to end of value(List) in results_dic. 
     # List Index 3 = whether(1) or not(0) Pet Image Label is a dog AND 
@@ -368,7 +363,7 @@ def adjust_results4_isadog(results_dic, dogsfile):
 
         # Pet Image Label IS of Dog (e.g. found in dognames_dic)
         if results_dic[key][0] in dognames_dic:
-            
+
             # Classifier Label IS image of Dog (e.g. found in dognames_dic)
             # appends (1, 1) because both labels are dogs
             if results_dic[key][1] in dognames_dic:
@@ -405,7 +400,6 @@ def adjust_results4_isadog(results_dic, dogsfile):
             # appends (0, 0) because both labels aren't dogs
             else:
                 pass
-            
 
 
 def calculates_results_stats(results_dic):
@@ -436,25 +430,25 @@ def calculates_results_stats(results_dic):
     #          in the comments below that start with "TODO: 6."
     # 
     # creates empty dictionary for results_stats
-    results_stats=dict()
-    
+    results_stats = dict()
+
     # Sets all counters to initial values of zero so that they can 
     # be incremented while processing through the images in results_dic 
     results_stats['n_dogs_img'] = 0
     results_stats['n_match'] = 0
     results_stats['n_correct_dogs'] = 0
     results_stats['n_correct_notdogs'] = 0
-    results_stats['n_correct_breed'] = 0       
-    
+    results_stats['n_correct_breed'] = 0
+
     # process through the results dictionary
     for key in results_dic:
-        
+
         # Next 2 lines of CODE ONLY required for check_images_hints.py to allow
         # code to run while program is being built - breaks processing if 
         # results_dic isn't completely created
         if len(results_dic[key]) < 5:
             break
- 
+
         # Labels Match Exactly
         if results_dic[key][2] == 1:
             results_stats['n_match'] += 1
@@ -471,11 +465,11 @@ def calculates_results_stats(results_dic):
         #           
         # Pet Image Label is a Dog AND Labels match- counts Correct Breed
         pass
-        
+
         # Pet Image Label is a Dog - counts number of dog images
         if results_dic[key][3] == 1:
             results_stats['n_dogs_img'] += 1
-            
+
             # Classifier classifies image as Dog (& pet image is a dog)
             # counts number of correct dog classifications
             if results_dic[key][4] == 1:
@@ -502,13 +496,13 @@ def calculates_results_stats(results_dic):
 
     # Calculates run statistics (counts & percentages) below that are calculated
     # using counters from above.
-    
+
     # calculates number of total images
     results_stats['n_images'] = len(results_dic)
 
     # calculates number of not-a-dog images using - images & dog images counts
-    results_stats['n_notdogs_img'] = (results_stats['n_images'] - 
-                                      results_stats['n_dogs_img']) 
+    results_stats['n_notdogs_img'] = (results_stats['n_images'] -
+                                      results_stats['n_dogs_img'])
 
     # TODO: 6.c REPLACE zero(0.0) with CODE that calculates the % of correctly
     #           matched images. Recall that this can be calculated by the
@@ -541,16 +535,16 @@ def calculates_results_stats(results_dic):
     # Uses conditional statement for when no 'not a dog' images were submitted 
     if results_stats['n_notdogs_img'] > 0:
         results_stats['pct_correct_notdogs'] = (results_stats['n_correct_notdogs'] /
-                                                results_stats['n_notdogs_img'])*100.0
+                                                results_stats['n_notdogs_img']) * 100.0
     else:
         results_stats['pct_correct_notdogs'] = 0.0
-        
+
     # returns results_stast dictionary 
     return results_stats
 
 
-def print_results(results_dic, results_stats, model, 
-                  print_incorrect_dogs = False, print_incorrect_breed = False):
+def print_results(results_dic, results_stats, model,
+                  print_incorrect_dogs=False, print_incorrect_breed=False):
     """
     Prints summary results on the classification and then prints incorrectly 
     classified dogs and incorrectly classified dog breeds if user indicates 
@@ -578,12 +572,12 @@ def print_results(results_dic, results_stats, model,
                               False doesn't print anything(default) (bool) 
     Returns:
            None - simply printing results.
-    """    
+    """
     # TODO: 7. EDIT and ADD code BELOW to do the following that's stated 
     #          in the comments below that start with "TODO: 7."
     # 
     # Prints summary statistics over the run
-    print("\n\n*** Results Summary for CNN Model Architecture",model.upper(), 
+    print("\n\n*** Results Summary for CNN Model Architecture", model.upper(),
           "***")
     print("%20s: %3d" % ('N Images', results_stats['n_images']))
     print("%20s: %3d" % ('N Dog Images', results_stats['n_dogs_img']))
@@ -594,7 +588,6 @@ def print_results(results_dic, results_stats, model,
     #          results_stats
     #
     print("")
-
 
     # Prints summary statistics (percentages) on Model Run
     print(" ")
@@ -608,20 +601,19 @@ def print_results(results_dic, results_stats, model,
         #           both the key and the value. Remember the value is accessed 
         #           by results_stats[key]
         #
-        pass 
-    
-    # IF print_incorrect_dogs == True AND there were images incorrectly 
+        pass
+
+        # IF print_incorrect_dogs == True AND there were images incorrectly
     # classified as dogs or vice versa - print out these cases
-    if (print_incorrect_dogs and 
-        ( (results_stats['n_correct_dogs'] + results_stats['n_correct_notdogs'])
-          != results_stats['n_images'] ) 
-       ):
+    if (print_incorrect_dogs and
+            ((results_stats['n_correct_dogs'] + results_stats['n_correct_notdogs'])
+             != results_stats['n_images'])
+    ):
         print("\nINCORRECT Dog/NOT Dog Assignments:")
 
         # process through results dict, printing incorrectly classified dogs
         for key in results_dic:
-
-            # TODO: 7.c REPLACE pass with CODE that prints out the pet label 
+            # TODO: 7.c REPLACE pass with CODE that prints out the pet label
             #           and the classifier label from results_dic dictionary    
             #           ONLY when the classifier function (classifier label) 
             #           misclassified dogs specifically: 
@@ -641,25 +633,23 @@ def print_results(results_dic, results_stats, model,
             # Pet Image Label is NOT-a-Dog - Classified as a-DOG
             pass
 
-
-    # IF print_incorrect_breed == True AND there were dogs whose breeds 
+    # IF print_incorrect_breed == True AND there were dogs whose breeds
     # were incorrectly classified - print out these cases                    
-    if (print_incorrect_breed and 
-        (results_stats['n_correct_dogs'] != results_stats['n_correct_breed']) 
-       ):
+    if (print_incorrect_breed and
+            (results_stats['n_correct_dogs'] != results_stats['n_correct_breed'])
+    ):
         print("\nINCORRECT Dog Breed Assignment:")
 
         # process through results dict, printing incorrectly classified breeds
         for key in results_dic:
 
             # Pet Image Label is-a-Dog, classified as-a-dog but is WRONG breed
-            if ( sum(results_dic[key][3:]) == 2 and
-                results_dic[key][2] == 0 ):
+            if (sum(results_dic[key][3:]) == 2 and
+                    results_dic[key][2] == 0):
                 print("Real: %-26s   Classifier: %-30s" % (results_dic[key][0],
-                                                          results_dic[key][1]))
+                                                           results_dic[key][1]))
 
-                
-                
+
 # Call to main function to run the program
 if __name__ == "__main__":
     main()
