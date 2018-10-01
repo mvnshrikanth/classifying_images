@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # */AIPND/intropylab-classifying-images/check_images_hints.py
-#                                                                             
-# TODO: 0. Fill in your information in the programming header below
+#
 # PROGRAMMER: Shrikanth Malarouth
 # DATE CREATED: 09/23/2018
 # REVISED DATE: 09/23/2018 <=(Date Revised - if any)
@@ -42,19 +41,23 @@ from time import time
 
 # Main program function defined below
 def main():
-    # TODO: 1. Define start_time to measure total program runtime by
     # collecting start time
     start_time = time()
 
-    # TODO: 2. Define get_input_args() function to create & retrieve command
     # line arguments
     in_arg = get_input_args()
-    print("Argument 1:", in_arg.dir, "  Argument 2:", in_arg.arch, "  Argument 3:", in_arg.dogfile)
 
-    # TODO: 3. Define get_pet_labels() function to create pet image labels by
     # creating a dictionary with key=filename and value=file label to be used
     # to check the accuracy of the classifier function
     answers_dic = get_pet_labels(in_arg.dir)
+
+    print("\nanswers_disc has", len(answers_dic), "key-value pairs.\nBelow are 10 of them:")
+
+    prnt = 0
+    for key in answers_dic:
+        if prnt < 10:
+            print("%2d key: %-30s label: %-26s" % (prnt + 1, key, answers_dic[key]))
+        prnt += 1
 
     # TODO: 4. Define classify_images() function to create the classifier 
     # labels with the classifier function uisng in_arg.arch, comparing the 
@@ -76,11 +79,9 @@ def main():
     # incorrect classifications of dogs and breeds if requested.
     print_results(result_dic, results_stats_dic, in_arg.arch, True, True)
 
-    # TODO: 1. Define end_time to measure total program runtime
     # by collecting end time
     end_time = time()
 
-    # TODO: 1. Define tot_time to computes overall runtime in
     # seconds by replacing zero with a the mathematical calculation that 
     # computes overall runtime
     # The print statement prints Overall runtime in hh:mm:ss format
@@ -120,7 +121,6 @@ def get_input_args():
     # text file with names of dogs.
     parser.add_argument('--dir', type=str, default='pet_images/',
                         help='path to folder of images')
-    # TODO: 2. EDIT parse.add_argument statements BELOW to add type & help for:
     #          --arch - the CNN model architecture
     #          --dogfile - text file of names of dog breeds
     parser.add_argument('--arch', default='vgg')
@@ -160,16 +160,22 @@ def get_pet_labels(image_dir):
         # isn't an pet image file
         if in_files[idx][0] != ".":
 
+            image_name = in_files[idx].split("_")
+
             # Creates temporary label variable to hold pet label name extracted
             pet_label = ""
 
-            # TODO: 3. BELOW REPLACE pass with CODE that will process each
             #          filename in the in_files list to extract the dog breed
             #          name from the filename. Recall that each filename can be
             #          accessed by in_files[idx]. Be certain to place the
             #          extracted dog breed name in the variable pet_label
             #          that's created as an empty string ABOVE
-            pass
+
+            for word in image_name:
+                if word.isalpha():
+                    pet_label += word.lower() + " "
+
+            pet_label = pet_label.strip()
 
             # If filename doesn't already exist in dictionary add it and it's
             # pet label - otherwise print an error message because indicates
