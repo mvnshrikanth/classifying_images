@@ -33,6 +33,9 @@ import argparse
 from os import listdir
 from time import time
 
+import classifier
+import print_functions_for_lab_checks as prnt
+
 
 # Imports classifier function for using CNN to classify images
 
@@ -46,29 +49,24 @@ def main():
 
     # line arguments
     in_arg = get_input_args()
+    prnt.check_command_line_arguments(in_arg)
 
     # creating a dictionary with key=filename and value=file label to be used
     # to check the accuracy of the classifier function
     answers_dic = get_pet_labels(in_arg.dir)
+    prnt.check_creating_pet_image_labels(answers_dic)
 
-    print("\nanswers_disc has", len(answers_dic), "key-value pairs.\nBelow are 10 of them:")
-
-    prnt = 0
-    for key in answers_dic:
-        if prnt < 10:
-            print("%2d key: %-30s label: %-26s" % (prnt + 1, key, answers_dic[key]))
-        prnt += 1
-
-    # TODO: 4. Define classify_images() function to create the classifier 
     # labels with the classifier function uisng in_arg.arch, comparing the 
     # labels, and creating a dictionary of results (result_dic)
     result_dic = classify_images(in_arg.dir, answers_dic, in_arg.arch)
+    prnt.check_classifying_images(result_dic)
 
-    # TODO: 5. Define adjust_results4_isadog() function to adjust the results
+    # adjust_results4_isadog() function to adjust the results
     # dictionary(result_dic) to determine if classifier correctly classified
     # images as 'a dog' or 'not a dog'. This demonstrates if the model can
     # correctly classify dog images as dogs (regardless of breed)
     adjust_results4_isadog(result_dic, in_arg.dogfile)
+
 
     # TODO: 6. Define calculates_results_stats() function to calculate
     # results of run and puts statistics in a results statistics
@@ -216,8 +214,6 @@ def classify_images(images_dir, petlabel_dic, model):
                     idx 2 = 1/0 (int)   where 1 = match between pet image and 
                     classifer labels and 0 = no match between labels
     """
-    # TODO: 4. EDIT and ADD code BELOW to do the following that's stated 
-    #          in the comments below that start with "TODO: 4."
     # 
     # Creates dictionary that will have all the results key = filename
     # value = list [Pet Label, Classifier Label, Match(1=yes,0=no)]
@@ -226,16 +222,13 @@ def classify_images(images_dir, petlabel_dic, model):
     # Process all files in the petlabels_dic - use images_dir to give fullpath
     for key in petlabel_dic:
 
-        # TODO: 4.a Set the string variable model_label to be the string that's
-        #           returned from using the classifier function instead of the
-        #           empty string below.
         #
         #  Runs classifier function to classify the images classifier function
         # inputs: path + filename  and  model, returns model_label
         # as classifier label
-        model_label = ""
+        model_label = classifier.classifier(images_dir + key, model)
 
-        # TODO: 4.b BELOW REPLACE pass with CODE to process the model_label to
+        # To process the model_label to
         #           convert all characters within model_label to lowercase
         #           letters and then remove whitespace characters from the ends
         #           of model_label. Be certain the resulting processed string
@@ -243,7 +236,8 @@ def classify_images(images_dir, petlabel_dic, model):
         #
         # Processes the results so they can be compared with pet image labels
         # set labels to lowercase (lower) and stripping off whitespace(strip)
-        pass
+        model_label = model_label.lower()
+        model_label = model_label.strip()
 
         # defines truth as pet image label and trys to find it using find()
         # string function to find it within classifier label(model_label).
@@ -262,7 +256,7 @@ def classify_images(images_dir, petlabel_dic, model):
                      )
                     )
             ):
-                # TODO: 4.c REPLACE pass BELOW with CODE that adds the
+                #adds the
                 #           filename (key) to results_dic dictionary for the
                 #           list (value) that contains the pet label (truth),
                 #           the classifier label (model_label), and value that
@@ -270,10 +264,11 @@ def classify_images(images_dir, petlabel_dic, model):
                 #
                 # Found pet label (truth) as stand-alone word(not within a word)
                 # within classifier label (model_label) - is a match
-                pass
+                if key not in results_dic:
+                    results_dic[key] = [truth, model_label, 1]
 
 
-            # TODO: 4.d REPLACE pass BELOW with CODE that adds the
+            #adds the
             #           filename (key) to results_dic dictionary for the
             #           list (value) that contains the pet label (truth),
             #           the classifier label (model_label), and value that
@@ -282,10 +277,11 @@ def classify_images(images_dir, petlabel_dic, model):
             # Found within a word that composes the classifier label,
             # like: 'fox' being found within 'foxhound' - not a match
             else:
-                pass
+                if key not in results_dic:
+                    results_dic[key] = [truth, model_label, 0]
 
 
-        # TODO: 4.e REPLACE pass BELOW with CODE that adds the
+        #adds the
         #           filename (key) to results_dic dictionary for the
         #           list (value) that contains the pet label (truth),
         #           the classifier label (model_label), and value that
@@ -293,7 +289,8 @@ def classify_images(images_dir, petlabel_dic, model):
         #
         # if not pet label isn't found within classifier label - not a match
         else:
-            pass
+            if key not in results_dic:
+                results_dic[key] = [truth, model_label, 0]
 
             # Return results dictionary
     return (results_dic)
@@ -327,8 +324,6 @@ def adjust_results4_isadog(results_dic, dogsfile):
     Returns:
            None - results_dic is mutable data type so no return needed.
     """
-    # TODO: 5. EDIT and ADD code BELOW to do the following that's stated 
-    #          in the comments below that start with "TODO: 5."
     # 
     # Creates dognames dictionary for quick matching to results_dic labels from
     # real answer & classifier's answer
